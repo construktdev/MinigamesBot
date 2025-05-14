@@ -1,11 +1,13 @@
 package de.construkter.minigamesBot;
 
+import de.construkter.minigamesBot.listeners.GameCommand;
 import de.construkter.minigamesBot.listeners.ReadyListener;
 import de.construkter.minigamesBot.utils.BotType;
 import de.construkter.minigamesBot.utils.Debug;
-import de.construkter.minigamesBot.utils.RAM;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +39,10 @@ public class Main extends Debug {
         log("JDABuilder created");
 
 
-        JDA jda = initListeners(builder).build();
+        JDA jda = init(builder).build();
         log("JDA built");
+
+        initCommands(jda);
 
         if (BOT_TYPE == null) {
             LOGGER.info(jda.getInviteUrl());
@@ -56,10 +60,20 @@ public class Main extends Debug {
         }
     }
 
-    private static JDABuilder initListeners(JDABuilder builder) {
+    private static JDABuilder init(JDABuilder builder) {
         log("Registering listeners");
         builder.addEventListeners(new ReadyListener());
+        builder.addEventListeners(new GameCommand());
         return builder;
+    }
+
+    private static void initCommands(JDA api) {
+        log("Registering commands");
+        api.updateCommands().addCommands(
+                Commands.slash("game", "Start a game")
+                        .addSubcommands(new SubcommandData("guess", "Guess the number game"))
+        ).queue();
+        log("Commands registered");
     }
 
     public static Properties getConfig() {
