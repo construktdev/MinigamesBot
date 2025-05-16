@@ -38,7 +38,6 @@ public class Main extends Debug {
         JDABuilder builder = JDABuilder.createDefault(config.getProperty("token"));
         log("JDABuilder created");
 
-
         JDA jda = init(builder).build();
         log("JDA built");
 
