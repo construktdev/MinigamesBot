@@ -1,5 +1,6 @@
 package de.construkter.minigamesBot;
 
+import de.construkter.minigamesBot.games.guessTheNumber.ChatEvent;
 import de.construkter.minigamesBot.listeners.GameCommand;
 import de.construkter.minigamesBot.listeners.ReadyListener;
 import de.construkter.minigamesBot.utils.BotType;
@@ -8,6 +9,8 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +38,8 @@ public class Main extends Debug {
             default -> BOT_TYPE = BotType.PROD;
         }
         log("Running in Debug-Mode");
-        JDABuilder builder = JDABuilder.createDefault(config.getProperty("token"));
+        JDABuilder builder = JDABuilder.createDefault(config.getProperty("token"), GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT);
+        builder.disableCache(CacheFlag.VOICE_STATE, CacheFlag.EMOJI, CacheFlag.STICKER, CacheFlag.SCHEDULED_EVENTS);
         log("JDABuilder created");
 
         JDA jda = init(builder).build();
@@ -63,6 +67,7 @@ public class Main extends Debug {
         log("Registering listeners");
         builder.addEventListeners(new ReadyListener());
         builder.addEventListeners(new GameCommand());
+        builder.addEventListeners(new ChatEvent());
         return builder;
     }
 

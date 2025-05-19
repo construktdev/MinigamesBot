@@ -13,6 +13,6 @@ public class RAM {
 
     public static void load(JDA api) {
         BOT_NAME = api.getSelfUser().getName();
-        LOG = api.getTextChannelById("1372156418081292308");
+        LOG = api.getTextChannelById(Main.getConfig().getProperty("logChannel"));
     }
 }
