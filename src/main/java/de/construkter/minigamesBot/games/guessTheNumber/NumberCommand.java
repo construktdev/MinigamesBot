@@ -6,6 +6,10 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 public class NumberCommand {
     public static void handle(SlashCommandInteractionEvent event) {
+        if (GuessTheNumber.active_games.containsKey(event.getUser())) {
+            event.reply("Du hast bereits einen aktiven GuessTheNumber Game!").setEphemeral(true).queue();
+            return;
+        }
         event.replyEmbeds(GuessTheNumber.getStartEmbed(event.getUser()).build()).queue();
         RAM.LOG.sendMessageEmbeds(Debug.getLogEmbed(event.getUser().getAsMention() + " started a new GuessTheNumber Game in " + event.getChannel().getAsMention()).build()).queue();
         GuessTheNumber.startGame(event.getUser());

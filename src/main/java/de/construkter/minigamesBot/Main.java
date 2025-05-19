@@ -2,6 +2,7 @@ package de.construkter.minigamesBot;
 
 import de.construkter.minigamesBot.games.guessTheNumber.ChatEvent;
 import de.construkter.minigamesBot.listeners.GameCommand;
+import de.construkter.minigamesBot.listeners.LeaderboardCommand;
 import de.construkter.minigamesBot.listeners.ReadyListener;
 import de.construkter.minigamesBot.utils.BotType;
 import de.construkter.minigamesBot.utils.Debug;
@@ -68,6 +69,7 @@ public class Main extends Debug {
         builder.addEventListeners(new ReadyListener());
         builder.addEventListeners(new GameCommand());
         builder.addEventListeners(new ChatEvent());
+        builder.addEventListeners(new LeaderboardCommand());
         return builder;
     }
 
@@ -75,7 +77,9 @@ public class Main extends Debug {
         log("Registering commands");
         api.updateCommands().addCommands(
                 Commands.slash("game", "Start a game")
-                        .addSubcommands(new SubcommandData("guess", "Guess the number game"))
+                        .addSubcommands(new SubcommandData("guess", "Guess the number game")),
+                Commands.slash("leaderboard", "Show the top 10 players")
+                        .addSubcommands(new SubcommandData("guess", "Guess the number leaderboard"))
         ).queue();
         log("Commands registered");
     }
